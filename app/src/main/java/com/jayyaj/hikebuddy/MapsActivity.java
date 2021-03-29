@@ -3,6 +3,7 @@ package com.jayyaj.hikebuddy;
 import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -10,6 +11,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.jayyaj.hikebuddy.data.AsyncResponse;
+import com.jayyaj.hikebuddy.data.Repository;
+import com.jayyaj.hikebuddy.model.Park;
+
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -38,6 +44,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        Repository.getPark(new AsyncResponse() {
+            @Override
+            public void processPark(List<Park> parks) {
+                
+            }
+        });
+        Repository.getPark(parks -> {
+            for (Park park: parks) {
+                Log.d("Parks", String.valueOf(park.getFullName()));
+            }
+        });
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
