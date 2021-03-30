@@ -21,6 +21,7 @@ public class Repository {
     public static void getPark(final AsyncResponse callBack) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Utils.PARKS_URL, null, response -> {
             try {
+                parkList.clear();
                 JSONArray jsonArray = response.getJSONArray("data");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     Park park = new Park();

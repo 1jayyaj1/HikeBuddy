@@ -44,7 +44,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mapFragment.getMapAsync(this);  //Updates map
 
             } else if (id == R.id.parksNavButton){
-                //Selected list
+                //Selected lists
                 selectedFragment = ParksFragment.newInstance();
             }
             //.replace() will replace the current fragment with the selected fragment
