@@ -77,6 +77,7 @@ public class ParksFragment extends Fragment implements OnParkClickListener {
     @Override
     public void onParkClicked(Park park) {
         Log.d("park", park.getFullName());
+        parkViewModel.selectPark(park);
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.parkFragment, DetailsFragment.newInstance())

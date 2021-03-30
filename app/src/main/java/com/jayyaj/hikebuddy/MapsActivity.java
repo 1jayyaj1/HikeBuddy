@@ -77,7 +77,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         parkList = new ArrayList<>();
-        parkList.clear();
 
         Repository.getPark(parks -> {
             parkList = parks;
