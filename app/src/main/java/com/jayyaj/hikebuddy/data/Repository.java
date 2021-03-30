@@ -5,6 +5,7 @@ import android.net.wifi.WpsInfo;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.jayyaj.hikebuddy.controller.AppController;
+import com.jayyaj.hikebuddy.model.Images;
 import com.jayyaj.hikebuddy.model.Park;
 import com.jayyaj.hikebuddy.util.Utils;
 
@@ -28,6 +29,27 @@ public class Repository {
                     park.setFullName(jsonObject.getString("fullName"));
                     park.setLatitude(jsonObject.getString("latitude"));
                     park.setLongitude(jsonObject.getString("longitude"));
+                    park.setParkCode(jsonObject.getString("parkCode"));
+                    park.setStates(jsonObject.getString("states"));
+
+                    JSONArray jsonImageList = jsonObject.getJSONArray("images");
+                    List<Images> imageList = new ArrayList<>();
+
+                    for (int j = 0; j < jsonImageList.length(); j++) {
+                        Images images = new Images();
+                        images.setCredit(jsonImageList.getJSONObject(j).getString("credit"));
+                        images.setTitle(jsonImageList.getJSONObject(j).getString("title"));
+                        images.setAltText(jsonImageList.getJSONObject(j).getString("altText"));
+                        images.setUrl(jsonImageList.getJSONObject(j).getString("url"));
+
+                        imageList.add(images);
+                    }
+
+                    park.setImages(imageList);
+                    park.setWeatherInfo(jsonObject.getString("weatherInfo"));
+                    park.setName(jsonObject.getString("name"));
+                    park.setDesignation(jsonObject.getString("designation"));
+
                     parkList.add(park);
                 }
                 if (callBack != null) {
