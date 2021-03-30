@@ -21,6 +21,7 @@
             android:id="@+id/rowParkImage"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:background="#DACACFCF"
             android:contentDescription="park image"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -28,24 +29,29 @@
 
     <TextView
         android:id="@+id/rowParkNameTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="36dp"
+        android:layout_marginEnd="16dp"
         android:text="TextView"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/rowParkTypeTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="TextView"
         android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/rowParkNameTextView" />
 
@@ -57,6 +63,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:text="TextView"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/cardView"

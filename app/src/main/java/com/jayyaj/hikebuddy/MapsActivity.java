@@ -2,6 +2,7 @@ package com.jayyaj.hikebuddy;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -17,17 +18,23 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.jayyaj.hikebuddy.data.AsyncResponse;
 import com.jayyaj.hikebuddy.data.Repository;
 import com.jayyaj.hikebuddy.model.Park;
+import com.jayyaj.hikebuddy.model.ParkViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private ParkViewModel parkViewModel;
+    private List<Park> parkList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        parkViewModel = new ViewModelProvider(MapsActivity.this)
+                .get(ParkViewModel.class);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -69,14 +76,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        parkList = new ArrayList<>();
+        parkList.clear();
+
         Repository.getPark(parks -> {
+            parkList = parks;
             for (Park park: parks) {
                 LatLng parkLatLng = new LatLng(Double.parseDouble(park.getLatitude()), Double.parseDouble(park.getLongitude()));
-                mMap.addMarker(new MarkerOptions().position(parkLatLng).title("Marker in " + park.getFullName()));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(parkLatLng));
+                mMap.addMarker(new MarkerOptions().position(parkLatLng).title(park.getFullName()));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(parkLatLng,5));
 
                 Log.d("Parks", String.valueOf(park.getFullName()));
             }
+            parkViewModel.setSelectedParks(parkList);
         });
     }
 }

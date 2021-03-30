@@ -5,24 +5,30 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jayyaj.hikebuddy.adapter.OnParkClickListener;
 import com.jayyaj.hikebuddy.adapter.ParkRecyclerViewAdapter;
 import com.jayyaj.hikebuddy.data.AsyncResponse;
 import com.jayyaj.hikebuddy.data.Repository;
 import com.jayyaj.hikebuddy.model.Park;
+import com.jayyaj.hikebuddy.model.ParkViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ParksFragment extends Fragment {
+public class ParksFragment extends Fragment implements OnParkClickListener {
 
     private RecyclerView recyclerView;
     private ParkRecyclerViewAdapter parkRecyclerViewAdapter;
+    private ParkViewModel parkViewModel;
     private List<Park> parkList;
 
     public ParksFragment() {
@@ -39,15 +45,20 @@ public class ParksFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        parkList = new ArrayList<>();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Repository.getPark(parks -> {
-            parkRecyclerViewAdapter = new ParkRecyclerViewAdapter(parks);
+
+        parkViewModel = new ViewModelProvider(requireActivity())
+                        .get(ParkViewModel.class);
+        if (parkViewModel.getParks().getValue() != null) {
+            parkList = parkViewModel.getParks().getValue();
+            parkRecyclerViewAdapter = new ParkRecyclerViewAdapter(parkList, this);
             recyclerView.setAdapter(parkRecyclerViewAdapter);
-        });
+        }
     }
 
     @Override
@@ -61,5 +72,14 @@ public class ParksFragment extends Fragment {
         //is hosted in
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return view;
+    }
+
+    @Override
+    public void onParkClicked(Park park) {
+        Log.d("park", park.getFullName());
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.parkFragment, DetailsFragment.newInstance())
+                .commit();
     }
 }

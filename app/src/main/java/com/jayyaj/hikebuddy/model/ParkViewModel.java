@@ -21,9 +21,6 @@ public class ParkViewModel extends ViewModel {
     }
     public LiveData<List<Park>> getParks() { return  selectedParks; }
     public void setSelectedParks(List<Park> parks) {
-         selectedParks.setValue(parks);
-
+        selectedParks.setValue(parks);
     }
-
-
 }

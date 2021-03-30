@@ -17,9 +17,11 @@ import java.util.List;
 
 public class ParkRecyclerViewAdapter extends RecyclerView.Adapter<ParkRecyclerViewAdapter.ViewHolder> {
     private final List<Park> parkList;
+    private final OnParkClickListener parkClickListener;
 
-    public ParkRecyclerViewAdapter(List<Park> parkList) {
+    public ParkRecyclerViewAdapter(List<Park> parkList, OnParkClickListener parkClickListener) {
         this.parkList = parkList;
+        this.parkClickListener = parkClickListener;
     }
 
     @NonNull
@@ -51,11 +53,12 @@ public class ParkRecyclerViewAdapter extends RecyclerView.Adapter<ParkRecyclerVi
 
     //ItemView is the view that we inflated from park row in the onCreateViewHolder methods
     //Fields are public so that we can ACCESS them from onBindViewHolder
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView parkImage;
         public TextView parkName;
         public TextView parkType;
         public TextView parkState;
+        private OnParkClickListener onParkClickListener;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -63,6 +66,14 @@ public class ParkRecyclerViewAdapter extends RecyclerView.Adapter<ParkRecyclerVi
             parkName = itemView.findViewById(R.id.rowParkNameTextView);
             parkType = itemView.findViewById(R.id.rowParkTypeTextView);
             parkState = itemView.findViewById(R.id.rowParkStateView);
+            this.onParkClickListener = parkClickListener;
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Park currPark = parkList.get(getAdapterPosition());
+            onParkClickListener.onParkClicked(currPark);
         }
     }
 }
