@@ -15,6 +15,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.jayyaj.hikebuddy.adapter.CustomInfoWindow;
@@ -26,7 +27,7 @@ import com.jayyaj.hikebuddy.model.ParkViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
     private ParkViewModel parkViewModel;
@@ -79,6 +80,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setInfoWindowAdapter(new CustomInfoWindow(getApplicationContext()));
+        mMap.setOnInfoWindowClickListener(this);
 
         parkList = new ArrayList<>();
 
@@ -93,12 +95,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 BitmapDescriptorFactory.HUE_VIOLET
                         ))
                         .snippet(park.getStates());
-                mMap.addMarker(markerOptions);
+
+                Marker marker = mMap.addMarker(markerOptions);
+                marker.setTag(park);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(parkLatLng,5));
 
                 Log.d("Parks", String.valueOf(park.getFullName()));
             }
             parkViewModel.setSelectedParks(parkList);
         });
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        moveToDetails(marker);
+    }
+
+    private void moveToDetails(Marker marker) {
+        parkViewModel.selectPark((Park) marker.getTag());
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.map, new DetailsFragment())
+                .commit();
     }
 }
