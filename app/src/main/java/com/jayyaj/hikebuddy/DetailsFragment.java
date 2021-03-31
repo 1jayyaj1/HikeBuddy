@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jayyaj.hikebuddy.adapter.ParkRecyclerViewAdapter;
+import com.jayyaj.hikebuddy.adapter.ViewPagerAdapter;
 import com.jayyaj.hikebuddy.model.Park;
 import com.jayyaj.hikebuddy.model.ParkViewModel;
 
@@ -22,7 +25,8 @@ import java.util.Observable;
 
 public class DetailsFragment extends Fragment {
     private ParkViewModel parkViewModel;
-
+    private ViewPager2 viewPager;
+    private ViewPagerAdapter viewPagerAdapter;
 
     public DetailsFragment() {
         // Required empty public constructor
@@ -41,11 +45,13 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        viewPager = view.findViewById(R.id.detailsViewPager);
+
         parkViewModel = new ViewModelProvider(requireActivity())
                 .get(ParkViewModel.class);
-        TextView test = view.findViewById(R.id.detailsFragment);
         parkViewModel.getSelectedPark().observe(this, park -> {
-            test.setText(park.getFullName());
+            viewPagerAdapter = new ViewPagerAdapter(park.getImages());
+            viewPager.setAdapter(viewPagerAdapter);
         });
     }
 

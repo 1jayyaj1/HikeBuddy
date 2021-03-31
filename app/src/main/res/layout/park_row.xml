@@ -21,7 +21,7 @@
             android:id="@+id/rowParkImage"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:background="#DACACFCF"
+            android:background="@color/image_view_background"
             android:contentDescription="park image"
             tools:srcCompat="@tools:sample/avatars" />
 
