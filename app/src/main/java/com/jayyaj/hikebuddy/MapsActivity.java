@@ -12,9 +12,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.jayyaj.hikebuddy.adapter.CustomInfoWindow;
 import com.jayyaj.hikebuddy.data.AsyncResponse;
 import com.jayyaj.hikebuddy.data.Repository;
 import com.jayyaj.hikebuddy.model.Park;
@@ -75,6 +78,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setInfoWindowAdapter(new CustomInfoWindow(getApplicationContext()));
 
         parkList = new ArrayList<>();
 
@@ -82,7 +86,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             parkList = parks;
             for (Park park: parks) {
                 LatLng parkLatLng = new LatLng(Double.parseDouble(park.getLatitude()), Double.parseDouble(park.getLongitude()));
-                mMap.addMarker(new MarkerOptions().position(parkLatLng).title(park.getFullName()));
+                MarkerOptions markerOptions = new MarkerOptions()
+                        .position(parkLatLng)
+                        .title(park.getFullName())
+                        .icon(BitmapDescriptorFactory.defaultMarker(
+                                BitmapDescriptorFactory.HUE_VIOLET
+                        ))
+                        .snippet(park.getStates());
+                mMap.addMarker(markerOptions);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(parkLatLng,5));
 
                 Log.d("Parks", String.valueOf(park.getFullName()));
