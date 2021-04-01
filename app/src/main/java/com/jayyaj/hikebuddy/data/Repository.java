@@ -23,8 +23,9 @@ import java.util.List;
 
 public class Repository {
     static List<Park> parkList = new ArrayList<>();
-    public static void getPark(final AsyncResponse callBack) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Utils.PARKS_URL, null, response -> {
+    public static void getPark(final AsyncResponse callBack, String stateCode) {
+        String stateUrl = Utils.getParksUrl(stateCode);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, stateUrl, null, response -> {
             try {
                 parkList.clear();
                 JSONArray jsonArray = response.getJSONArray("data");
